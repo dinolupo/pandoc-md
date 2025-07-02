@@ -96,3 +96,6 @@ graph TD;
 - **Template LaTeX:** Modificare il file `templates/professional.tex` per cambiare la struttura del documento (es. layout della pagina di copertina, header, footer).
 - **Logo:** Sostituire il file `assets/logo.png` con il proprio logo.
 - **Stili e Variabili Pandoc:** È possibile estendere il comando nel `Dockerfile` per includere ulteriori opzioni di Pandoc, come variabili personalizzate (`-V key=value`) o stili di citazione.
+
+
+docker run --rm --volume "$(pwd):/data" --user $(id -u):$(id -g) pandoc-md --lua-filter diagram.lua input/documento.md -o outfile.pdf --template eisvogel --listings

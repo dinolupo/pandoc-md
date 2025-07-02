@@ -1,0 +1,9 @@
+# Questo file centralizza la configurazione per il filtro diagram.
+# Viene caricato con l'opzione --defaults.
+variables:
+  diagram:
+    engine:
+      plantuml:
+        mime-type: image/svg+xml
+      mermaid:
+        mime-type: image/svg+xml

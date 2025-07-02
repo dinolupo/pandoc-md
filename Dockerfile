@@ -4,7 +4,7 @@ FROM pandoc/extra:latest-ubuntu
 # Variabili di build
 # =====================
 ARG JAVA_VERSION=21.0.7+6
-ARG JAVA_VERSION_UNDERSCORE=21.0.7_6
+ARG JAVA_VERSION_FILE=21.0.7_6
 ARG PLANTUML_VERSION=1.2025.4
 ARG DIAGRAM_VERSION=1.2.0
 ARG PLANTUML_JAR_URL=https://github.com/plantuml/plantuml/releases/download/v${PLANTUML_VERSION}/plantuml-${PLANTUML_VERSION}.jar
@@ -17,26 +17,25 @@ ENV PATH="$JAVA_HOME/bin:$PATH"
 # =====================
 # Sistema base e tool
 # =====================
-RUN apt-get update \
-    && apt-get install -y curl graphviz nodejs npm \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    graphviz \
+    inkscape \
+    unzip \
     && rm -rf /var/lib/apt/lists/*
 
-# Installa mermaid-cli globalmente
-RUN npm install -g @mermaid-js/mermaid-cli
+# =====================
+# Installazione JRE
+# =====================
+ARG JAVA_VERSION="21.0.7+6"
+ARG JAVA_VERSION_FILE="21.0.7_6"
 
-# =====================
-# Java (Temurin JRE)
-# =====================
-
-# =====================
-# Installazione automatica di Eclipse Temurin JRE (multi-arch)
-# =====================
 RUN set -eux; \
     ARCH="$(uname -m)"; \
     if [ "$ARCH" = "x86_64" ]; then \
-        JRE_URL="https://github.com/adoptium/temurin21-binaries/releases/download/jdk-${JAVA_VERSION}/OpenJDK21U-jre_x64_linux_hotspot_${JAVA_VERSION_UNDERSCORE}.tar.gz"; \
+    JRE_URL="https://github.com/adoptium/temurin21-binaries/releases/download/jdk-${JAVA_VERSION}/OpenJDK21U-jre_x64_linux_hotspot_${JAVA_VERSION_FILE}.tar.gz"; \
     elif [ "$ARCH" = "aarch64" ]; then \
-        JRE_URL="https://github.com/adoptium/temurin21-binaries/releases/download/jdk-${JAVA_VERSION}/OpenJDK21U-jre_aarch64_linux_hotspot_${JAVA_VERSION_UNDERSCORE}.tar.gz"; \
+    JRE_URL="https://github.com/adoptium/temurin21-binaries/releases/download/jdk-${JAVA_VERSION}/OpenJDK21U-jre_aarch64_linux_hotspot_${JAVA_VERSION_FILE}.tar.gz"; \
     else \
         echo "Unsupported architecture: $ARCH"; exit 1; \
     fi; \
@@ -46,21 +45,29 @@ RUN set -eux; \
 
 ENV PATH="$JAVA_HOME/bin:$PATH"
 
-# Variabile versione PlantUML
-ENV PLANTUML_VERSION=1.2025.4
-ENV PLANTUML_JAR_URL="https://github.com/plantuml/plantuml/releases/download/v${PLANTUML_VERSION}/plantuml-${PLANTUML_VERSION}.jar"
+# =====================
+# Installazione PlantUML, Batik e dipendenze
+# =====================
+ARG PLANTUML_JAR_URL=https://github.com/plantuml/plantuml/releases/download/v1.2024.5/plantuml-1.2024.5.jar
+ARG BATIK_ZIP_URL=https://archive.apache.org/dist/xmlgraphics/batik/binaries/batik-bin-1.17.zip
+ARG COMMONS_IO_URL=https://repo1.maven.org/maven2/commons-io/commons-io/2.11.0/commons-io-2.11.0.jar
 
-# =====================
-# PlantUML (jar + shortcut)
-# =====================
-RUN mkdir -p /opt/plantuml \
+RUN mkdir -p /opt/plantuml /opt/batik/lib \
     && curl -fsSL "$PLANTUML_JAR_URL" -o /opt/plantuml/plantuml.jar \
-    && echo '#!/bin/sh\nexec java -jar /opt/plantuml/plantuml.jar "$@"' > /usr/local/bin/plantuml \
+    && curl -fsSL "$BATIK_ZIP_URL" -o /tmp/batik.zip \
+    && unzip /tmp/batik.zip -d /opt/batik \
+    && mv /opt/batik/batik-1.17/lib/* /opt/batik/lib/ \
+    && rm -rf /tmp/batik.zip /opt/batik/batik-1.17 \
+    && curl -fsSL "$COMMONS_IO_URL" -o /opt/batik/lib/commons-io.jar \
+    && echo '#!/bin/sh\nexec java -Djava.awt.headless=true -cp "/opt/plantuml/plantuml.jar:/opt/batik/lib/*" net.sourceforge.plantuml.Run "$@"' > /usr/local/bin/plantuml \
     && chmod +x /usr/local/bin/plantuml
 
 # =====================
-# Pandoc-ext Diagram Filter
+# Pandoc-ext Diagram Filter (solo diagram.lua in filters root)
 # =====================
-RUN mkdir -p /usr/local/share/pandoc/filters/diagram-ext \
-    && curl -fsSL "$DIAGRAM_URL" | tar -xz --strip-components=1 -C /usr/local/share/pandoc/filters/diagram-ext \
-    && chmod -R a+rX /usr/local/share/pandoc/filters/diagram-ext
+RUN set -eux; \
+    mkdir -p /tmp/diagram-ext; \
+    curl -fsSL "$DIAGRAM_URL" | tar -xz --strip-components=1 -C /tmp/diagram-ext; \
+    cp /tmp/diagram-ext/_extensions/diagram/diagram.lua /usr/local/share/pandoc/filters/diagram.lua; \
+    chmod a+rX /usr/local/share/pandoc/filters/diagram.lua; \
+    rm -rf /tmp/diagram-ext
