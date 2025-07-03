@@ -1,5 +1,23 @@
 # Questo file centralizza la configurazione per il filtro diagram.
-# Viene caricato con l'opzione --defaults.
+# Viene caricato con l'opzione --defaults o -d.
+filters: ['diagram.lua']
+metadata:
+  engine:
+    # enable dot/GraphViz and PlantUML with default options
+    dot: true
+    plantuml: true
+
+    # disable processing of asymptote and Mermaid diagrams
+    asymptote: false
+    mermaid: false
+
+    # Use LuaLaTeX to compile TikZ, define headers
+    tikz:
+      execpath: lualatex
+      additional-packages: |
+        \usepackage{adjustbox}
+        \usetikzlibrary{arrows, shapes}
+
 variables:
   diagram:
     engine:

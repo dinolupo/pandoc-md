@@ -98,4 +98,4 @@ graph TD;
 - **Stili e Variabili Pandoc:** È possibile estendere il comando nel `Dockerfile` per includere ulteriori opzioni di Pandoc, come variabili personalizzate (`-V key=value`) o stili di citazione.
 
 
-docker run --rm --volume "$(pwd):/data" --user $(id -u):$(id -g) pandoc-md --lua-filter diagram.lua input/documento.md -o outfile.pdf --template eisvogel --listings
+docker run --rm --volume "$(pwd):/data" --user $(id -u):$(id -g) pandoc-md --defaults /data/diagram-filter.yaml --lua-filter diagram.lua /data/input/documento.md -o /data/input/outfile.pdf --template eisvogel --listings
