@@ -3,13 +3,13 @@
 filters: ['diagram.lua']
 metadata:
   engine:
-    # enable dot/GraphViz and PlantUML with default options
+    # enable dot/GraphViz, PlantUML and Mermaid with default options
     dot: true
     plantuml: true
 
-    # disable processing of asymptote and Mermaid diagrams
+    # disable processing of asymptote diagrams, enable Mermaid
     asymptote: false
-    mermaid: false
+    mermaid: true
 
     # Use LuaLaTeX to compile TikZ, define headers
     tikz:

@@ -99,3 +99,21 @@ graph TD;
 
 
 docker run --rm --volume "$(pwd):/data" --user $(id -u):$(id -g) pandoc-md --defaults /data/diagram-filter.yaml --lua-filter diagram.lua /data/input/documento.md -o /data/input/outfile.pdf --template eisvogel --listings
+
+docker run --rm -v "${PWD}:/data" pandoc-md \
+  --defaults /data/diagram-filter.yaml \
+  --lua-filter diagram.lua \
+  /data/input/documento.md \
+  -o /data/input/outfile.pdf \
+  --template eisvogel \
+  --listings
+
+
+docker run --rm -v "${PWD}:/data" pandoc-md `
+--defaults /data/diagram-filter.yaml `
+--lua-filter diagram.lua `
+/data/input/documento.md `
+-o /data/input/outfile.pdf `
+--template eisvogel `
+--listings
+
