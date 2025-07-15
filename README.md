@@ -98,22 +98,7 @@ graph TD;
 - **Stili e Variabili Pandoc:** È possibile estendere il comando nel `Dockerfile` per includere ulteriori opzioni di Pandoc, come variabili personalizzate (`-V key=value`) o stili di citazione.
 
 
-docker run --rm --volume "$(pwd):/data" --user $(id -u):$(id -g) pandoc-md --defaults /data/diagram-filter.yaml --lua-filter diagram.lua /data/input/documento.md -o /data/input/outfile.pdf --template eisvogel --listings
 
-docker run --rm -v "${PWD}:/data" pandoc-md \
-  --defaults /data/diagram-filter.yaml \
-  --lua-filter diagram.lua \
-  /data/input/documento.md \
-  -o /data/input/outfile.pdf \
-  --template eisvogel \
-  --listings
+docker run --rm --volume ".:/data" pandoc-md --defaults /data/diagram-filter.yaml --lua-filter diagram.lua /data/input/FR-Migration-Guidelines-v1.md -o /data/input/outfile.pdf --template eisvogel --listings --pdf-engine=lualatex --number-sections
 
-
-docker run --rm -v "${PWD}:/data" pandoc-md `
---defaults /data/diagram-filter.yaml `
---lua-filter diagram.lua `
-/data/input/documento.md `
--o /data/input/outfile.pdf `
---template eisvogel `
---listings
-
+docker run --rm --volume ".:/data" pandoc-md --defaults /data/diagram-filter.yaml --lua-filter diagram.lua /data/input/FR-Migration-Guidelines-v1.md -o /data/input/outfile.pdf --from markdown --template eisvogel --listings --pdf-engine "tectonic" --number-sections
