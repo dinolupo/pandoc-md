@@ -1,7 +1,34 @@
 ---
-title: "Documento di Prova Aziendale"
-author: "Mario Rossi"
-date: "2 Luglio 2025"
+title: "Linee Guida Architetturali"
+subtitle: "Progetto CSE Fornitori - FASE 2"
+author: ["GFT Italia"]
+date: "15 Luglio 2025"
+subject: "Architettura Software"
+keywords: [microservizi, modernizzazione, cloud-native, OpenShift]
+lang: "it"
+# titlepage: true
+# titlepage-color: "1E90FF"
+# titlepage-text-color: "FFFFFF"
+# titlepage-rule-color: "FFFFFF"
+# titlepage-rule-height: 2
+titlepage: true
+titlepage-text-color: "7137C8"
+titlepage-rule-color: "7137C8"
+titlepage-rule-height: 2
+logo: "assets/client.png"
+logo-width: 120
+
+toc: true
+toc-own-page: true
+colorlinks: true
+header-includes:
+  - \usepackage{fontspec, lastpage, graphicx}
+  - \defaultfontfeatures{Ligatures=TeX}
+linkcolor: black
+table-use-row-colors: true
+header-right: "\\includegraphics[width=2cm]{/data/assets/logo.png}"
+footer-right: " GFT Technologies SE 2025"
+footer-left: "\\thepage/\\pageref{LastPage}"
 ---
 
 # Introduzione

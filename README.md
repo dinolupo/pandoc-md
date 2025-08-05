@@ -97,8 +97,14 @@ graph TD;
 - **Logo:** Sostituire il file `assets/logo.png` con il proprio logo.
 - **Stili e Variabili Pandoc:** È possibile estendere il comando nel `Dockerfile` per includere ulteriori opzioni di Pandoc, come variabili personalizzate (`-V key=value`) o stili di citazione.
 
+> Command
 
+docker run --rm --volume ".:/data" pandoc-md --defaults diagram-filter --lua-filter diagram.lua /data/input/CSE-Fornitori-Architettura-v1.md -o /data/input/CSE-Fornitori-Architettura-v1.pdf --template eisvogel --listings --pdf-engine=lualatex --number-sections --filter pandoc-latex-environment
 
-docker run --rm --volume ".:/data" pandoc-md --defaults /data/diagram-filter.yaml --lua-filter diagram.lua /data/input/FR-Migration-Guidelines-v1.md -o /data/input/outfile.pdf --template eisvogel --listings --pdf-engine=lualatex --number-sections
+> OLD
 
-docker run --rm --volume ".:/data" pandoc-md --defaults /data/diagram-filter.yaml --lua-filter diagram.lua /data/input/FR-Migration-Guidelines-v1.md -o /data/input/outfile.pdf --from markdown --template eisvogel --listings --pdf-engine "tectonic" --number-sections
+docker run --rm --volume ".:/data" pandoc-md --defaults /data/diagram-filter.yaml --lua-filter diagram.lua /data/input/CSE-Fornitori-Architettura-v1.md -o /data/input/CSE-Fornitori-Architettura-v1.pdf --template eisvogel --listings --pdf-engine=lualatex --number-sections --filter pandoc-latex-environment
+
+> OLD
+
+docker run --rm --volume ".:/data" pandoc-md --defaults /data/diagram-filter.yaml --lua-filter diagram.lua /data/input/CSE-Fornitori-Architettura-v1.md -o /data/input/CSE-Fornitori-Architettura-v1.pdf --template eisvogel --listings --number-sections --filter pandoc-latex-environment

@@ -83,6 +83,8 @@ RUN mkdir -p /tmp/diagram-ext \
 COPY puppeteer-config.json /root/.puppeteer.json
 COPY diagram.lua /usr/local/share/pandoc/filters/diagram.lua
 RUN tlmgr install lastpage
+RUN mkdir -p /usr/local/share/pandoc/defaults
+COPY diagram-filter.yaml /usr/local/share/pandoc/defaults/diagram-filter.yaml 
 
 RUN mkdir -p /data && chmod -R 777 /data
 WORKDIR /data
