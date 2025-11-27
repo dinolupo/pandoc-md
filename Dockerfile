@@ -1,4 +1,4 @@
-FROM pandoc/extra:latest-ubuntu
+FROM pandoc/extra:3.7-ubuntu
 
 # Variabili
 ARG JAVA_VERSION=21.0.7+6
